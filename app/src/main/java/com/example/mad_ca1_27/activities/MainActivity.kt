@@ -32,6 +32,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.lifecycle.compose.LocalLifecycleOwner
 
 
@@ -73,8 +74,6 @@ fun FinanceTrackerScreen() {
     val transactions = remember (refreshKey) {
         AppData.transactions.findAll()
     }
-
-
 
 
     val income = transactions
@@ -199,6 +198,8 @@ fun FinanceTrackerScreen() {
 @Composable
 fun TransactionRow(transaction: Transaction) {
 
+    val context = LocalContext.current
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -209,10 +210,13 @@ fun TransactionRow(transaction: Transaction) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Column {
+            Column (
+                modifier = Modifier.weight(1f)
 
+            ){
                 Text(
                     text = transaction.title,
                     style = MaterialTheme.typography.titleMedium
@@ -221,15 +225,32 @@ fun TransactionRow(transaction: Transaction) {
                 Text(
                     text = transaction.category
                 )
+
+                Text(
+                    text = if(transaction.isIncome) {
+                        "+ €%.2f".format(transaction.amount)
+                    }else{
+                        "- €%.2f".format(transaction.amount)
+                    }
+                )
+
             }
 
-            Text(
-                text = if(transaction.isIncome) {
-                    "+ €%.2f".format(transaction.amount)
-                }else{
-                    "- €%.2f".format(transaction.amount)
+            Button(
+                onClick = {
+                    val intent = Intent(
+                        context,
+                        AddEditTransactionActivity::class.java
+                    )
+
+                    intent.putExtra("TRANSACTION_ID", transaction.id)
+
+                    context.startActivity(intent)
                 }
-            )
+            ) {
+                Text("Edit")
+            }
+
         }
     }
 }

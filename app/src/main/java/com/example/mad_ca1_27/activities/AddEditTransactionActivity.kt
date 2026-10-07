@@ -44,10 +44,23 @@ fun AddEditTransactionScreen() {
 
     val context = LocalContext.current
 
+    val transactionId = (context as? Activity)?.intent?.getLongExtra(
+        "TRANSACTION_ID",
+        -1L
+    ) ?: -1L
+
+    val existingTransaction = if (transactionId != -1L) {
+        AppData.transactions.findOne(transactionId)
+    }else{
+        null
+    }
+
+    val isEditing = existingTransaction != null
+
     Scaffold(
         topBar = {
             Text(
-                text = "Add Transaction",
+                text = if (isEditing) "Edit Transaction" else "Add Transaction",
                 modifier = Modifier.padding(16.dp)
             )
         }
@@ -59,11 +72,26 @@ fun AddEditTransactionScreen() {
                 .padding(paddingValues)
                 .padding(16.dp)
         ) {
-            var title by remember { mutableStateOf("") }
-            var amount by remember { mutableStateOf("") }
-            var category by remember { mutableStateOf("") }
-            var description by remember { mutableStateOf("") }
-            var isIncome by remember { mutableStateOf(false) }
+            var title by remember {
+                mutableStateOf(existingTransaction?.title ?: "")
+            }
+
+            var amount by remember {
+                mutableStateOf(existingTransaction?.amount?.toString() ?: "")
+            }
+
+            var category by remember {
+                mutableStateOf(existingTransaction?.category ?: "")
+
+            }
+            var description by remember {
+                mutableStateOf(existingTransaction?.description ?: "")
+
+            }
+
+            var isIncome by remember {
+                mutableStateOf(existingTransaction?.isIncome ?: false)
+            }
 
             Text(
                 text = "Transaction Details",
@@ -163,7 +191,12 @@ fun AddEditTransactionScreen() {
 
                         )
 
-                        AppData.transactions.create(transaction)
+                        if (isEditing) {
+                            transaction.id = transactionId
+                            AppData.transactions.update(transaction)
+                        } else{
+                            AppData.transactions.create(transaction)
+                        }
 
                         (context as? Activity)?.finish()
 
@@ -173,7 +206,7 @@ fun AddEditTransactionScreen() {
                 modifier = Modifier.fillMaxWidth()
 
             ) {
-                Text("Save Transaction")
+                Text(if (isEditing) "Update Transaction" else "Save Transaction")
             }
 
         }
