@@ -29,6 +29,7 @@ import android.app.Activity
 import androidx.compose.ui.platform.LocalContext
 
 
+
 class AddEditTransactionActivity : ComponentActivity() {
     override  fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
@@ -92,6 +93,8 @@ fun AddEditTransactionScreen() {
             var isIncome by remember {
                 mutableStateOf(existingTransaction?.isIncome ?: false)
             }
+
+
 
             Text(
                 text = "Transaction Details",
@@ -207,6 +210,19 @@ fun AddEditTransactionScreen() {
 
             ) {
                 Text(if (isEditing) "Update Transaction" else "Save Transaction")
+            }
+            if (isEditing) {
+                Spacer(modifier = Modifier.height(12.dp))
+
+                Button(
+                    onClick = {
+                        AppData.transactions.delete(transactionId)
+                        (context as? Activity)?.finish()
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Delete Transaction")
+                }
             }
 
         }

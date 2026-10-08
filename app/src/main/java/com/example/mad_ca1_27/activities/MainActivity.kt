@@ -88,6 +88,7 @@ fun FinanceTrackerScreen() {
     val balance = income - expenses
 
 
+
     Scaffold(
         topBar = {
             Text(
@@ -172,7 +173,26 @@ fun FinanceTrackerScreen() {
                 )
             }else {
                 transactions.takeLast(5).forEach { transaction ->
-                    TransactionRow(transaction)
+                    TransactionRow(
+                        title = transaction.title,
+                        category = transaction.category,
+                        amount = transaction.amount,
+                        isIncome = transaction.isIncome,
+                        onEdit = {
+                            val intent = Intent(
+                                context,
+                                AddEditTransactionActivity::class.java
+
+                            )
+                            intent.putExtra("TRANSACTION_ID", transaction.id)
+
+                            context.startActivity(intent)
+
+
+                        }
+
+
+                        )
                 }
             }
 
@@ -196,9 +216,15 @@ fun FinanceTrackerScreen() {
 }
 
 @Composable
-fun TransactionRow(transaction: Transaction) {
+fun TransactionRow(
+    title: String,
+    category: String,
+    amount: Double,
+    isIncome: Boolean,
+    onEdit: () -> Unit
 
-    val context = LocalContext.current
+) {
+
 
     Card(
         modifier = Modifier
@@ -218,35 +244,26 @@ fun TransactionRow(transaction: Transaction) {
 
             ){
                 Text(
-                    text = transaction.title,
+                    text = title,
                     style = MaterialTheme.typography.titleMedium
                 )
 
                 Text(
-                    text = transaction.category
+                    text = category
                 )
 
                 Text(
-                    text = if(transaction.isIncome) {
-                        "+ €%.2f".format(transaction.amount)
+                    text = if(isIncome) {
+                        "+ €%.2f".format(amount)
                     }else{
-                        "- €%.2f".format(transaction.amount)
+                        "- €%.2f".format(amount)
                     }
                 )
 
             }
 
             Button(
-                onClick = {
-                    val intent = Intent(
-                        context,
-                        AddEditTransactionActivity::class.java
-                    )
-
-                    intent.putExtra("TRANSACTION_ID", transaction.id)
-
-                    context.startActivity(intent)
-                }
+                onClick = onEdit
             ) {
                 Text("Edit")
             }

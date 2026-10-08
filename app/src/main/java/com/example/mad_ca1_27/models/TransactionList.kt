@@ -9,7 +9,7 @@ class TransactionList {
     private var lastId = AtomicLong(0L)
 
     fun findAll(): List<Transaction> {
-        return transactions
+        return transactions.toList()
     }
 
     fun findOne(id: Long): Transaction? {
