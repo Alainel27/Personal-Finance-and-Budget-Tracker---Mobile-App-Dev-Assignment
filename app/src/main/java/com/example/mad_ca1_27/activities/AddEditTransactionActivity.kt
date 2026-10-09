@@ -94,6 +94,12 @@ fun AddEditTransactionScreen() {
                 mutableStateOf(existingTransaction?.isIncome ?: false)
             }
 
+            var titleError by remember { mutableStateOf(false) }
+
+            var amountError by remember { mutableStateOf(false) }
+
+            var categoryError by remember { mutableStateOf(false) }
+
 
 
             Text(
@@ -105,30 +111,53 @@ fun AddEditTransactionScreen() {
 
             OutlinedTextField(
                 value = title,
-                onValueChange = {title = it},
+                onValueChange = {
+                    title = it
+                    titleError = false
+                },
                 label = {Text("Title")},
+                isError = titleError,
                 modifier = Modifier.fillMaxWidth()
 
             )
+
+            if (titleError) {
+                Text("Title is required")
+            }
 
             Spacer(modifier = Modifier.height(12.dp))
 
             OutlinedTextField(
                 value = amount,
-                onValueChange = {amount = it},
+                onValueChange = {
+                    amount = it
+                    amountError = false
+                },
                 label = {Text("Amount")},
+                isError = amountError,
                 modifier = Modifier.fillMaxWidth()
 
             )
+            if (amountError) {
+                Text("Enter an amount that is greater than zero")
+            }
 
             Spacer(modifier = Modifier.height(12.dp))
 
             OutlinedTextField(
                 value = category,
-                onValueChange = {category = it},
+                onValueChange = {
+                    category = it
+                    categoryError = false
+                },
                 label = {Text("Category")},
+                isError = categoryError,
                 modifier = Modifier.fillMaxWidth()
             )
+
+            if (categoryError){
+                Text("Category is required")
+            }
 
             Spacer(modifier = Modifier.height(12.dp))
 
@@ -175,35 +204,28 @@ fun AddEditTransactionScreen() {
 
             Button(
                 onClick = {
-                    val transactionAmount = amount.toDoubleOrNull()
+                   val transactionAmount = amount.toDoubleOrNull()
 
-                    if (title.isNotBlank() &&
-                        transactionAmount != null &&
-                        transactionAmount > 0 &&
-                        category.isNotBlank()
+                    titleError = title.isBlank()
+                    amountError = transactionAmount == null || transactionAmount <- 0
+                    categoryError = category.isBlank()
 
-                        ) {
-
+                    if (!titleError && !amountError && !categoryError) {
                         val transaction = Transaction(
-
-                            title = title,
-                            amount = transactionAmount,
-                            category = category,
-                            description = description,
+                            title = title.trim(),
+                            amount = transactionAmount!!,
+                            category = category.trim(),
+                            description = description.trim(),
                             isIncome = isIncome
-
                         )
 
                         if (isEditing) {
                             transaction.id = transactionId
                             AppData.transactions.update(transaction)
-                        } else{
+                        }else{
                             AppData.transactions.create(transaction)
                         }
-
                         (context as? Activity)?.finish()
-
-
                     }
                 },
                 modifier = Modifier.fillMaxWidth()
