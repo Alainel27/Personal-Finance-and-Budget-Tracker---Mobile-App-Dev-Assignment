@@ -39,6 +39,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        AppData.initialise(applicationContext)
        setContent {
            FinanceTrackerScreen()
        }

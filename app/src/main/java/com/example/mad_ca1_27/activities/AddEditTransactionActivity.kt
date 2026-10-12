@@ -225,6 +225,7 @@ fun AddEditTransactionScreen() {
                         }else{
                             AppData.transactions.create(transaction)
                         }
+                        AppData.saveTransaction()
                         (context as? Activity)?.finish()
                     }
                 },
@@ -239,6 +240,7 @@ fun AddEditTransactionScreen() {
                 Button(
                     onClick = {
                         AppData.transactions.delete(transactionId)
+                        AppData.saveTransaction()
                         (context as? Activity)?.finish()
                     },
                     modifier = Modifier.fillMaxWidth()

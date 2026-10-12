@@ -42,5 +42,13 @@ class TransactionList {
         return transactions.removeIf{it.id == id}
     }
 
+    //JSON
+    fun loadAll(savedTransactions: List<Transaction>) {
+        transactions.clear()
+        transactions.addAll(savedTransactions)
+
+        lastId.set(savedTransactions.maxOfOrNull { it.id }?: 0L)
+    }
+
 
 }
