@@ -4,7 +4,9 @@ import java.util.concurrent.atomic.AtomicLong
 
 class TransactionList {
     //CRUD basics
+    //contains the transaction details in an empty list
     private val transactions = ArrayList<Transaction>()
+
 
     private var lastId = AtomicLong(0L)
 
