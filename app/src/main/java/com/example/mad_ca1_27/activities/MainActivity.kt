@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import com.example.mad_ca1_27.main.AppData
 import com.example.mad_ca1_27.models.Transaction
 import android.content.Intent
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -36,11 +37,16 @@ import androidx.compose.ui.Alignment
 import androidx.lifecycle.compose.LocalLifecycleOwner
 
 
+//declared as main activity
+//jetpack compose is used
 class MainActivity : ComponentActivity() {
+    //main activity set up
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         AppData.initialise(applicationContext)
+        //sets up screen interface
        setContent {
+           //shows the dashboard
            FinanceTrackerScreen()
        }
 
@@ -48,35 +54,49 @@ class MainActivity : ComponentActivity() {
 
 
 }
+//the function dashboard that dispalys the balance, income, expenses, recent transactions and add transaction button along with edit button
 @Composable
 fun FinanceTrackerScreen() {
-
+    //declares the varaible that cannot be reassigned
+    //context is used in AddEdit when a user wants to add oir edit a transaction
     val context = LocalContext.current
 
+    //lifestyle tracks the state of a screen
+    //its purpose is to detect when the user returns to the dashboard after visiting another screen
     val lifecycleOwner = LocalLifecycleOwner.current
 
+    //this variable is a signal to refresh the dashboard, when its value changes, compose knows to recompose the UI
     var refreshKey by remember { mutableStateOf(0) }
 
+    //AI was used to help in understanding and creating this code
+    //The code is vital as it used in detecting when the dashboard becomes active and triggers a refresh
+    //registers a lifecycle observer and remove it
     DisposableEffect(lifecycleOwner) {
+        //watches for the lifecycle changes so the app cna respond when the dashboard becomes active
         val observer = LifecycleEventObserver { _, event ->
 
+            //checks if the dashboard is in a resumed state and if it is the refreshkey increments
+            //which in turn refreshes the dashbaord
             if (event == Lifecycle.Event.ON_RESUME) {
                 refreshKey++
             }
         }
+        //this line connects it to the lifecycle so it can receive events
 
         lifecycleOwner.lifecycle.addObserver(observer)
 
+        //prevents the observer from remaining when unneeded
         onDispose { lifecycleOwner.lifecycle.removeObserver(observer)
         }
     }
 
 
+    //holds the list of transactions that the dashbaord uses
     val transactions = remember (refreshKey) {
         AppData.transactions.findAll()
     }
 
-
+    //calculates the total income
     val income = transactions
         .filter { it.isIncome}
         .sumOf { it.amount}
@@ -86,13 +106,16 @@ fun FinanceTrackerScreen() {
         .filter { !it.isIncome}
         .sumOf {it.amount}
 
+    //calculates the values together to get the balance
     val balance = income - expenses
 
 
 
+    //structure for the screen
     Scaffold(
         topBar = {
             Text(
+                //heading displayed
                 text = "Finance Tracker",
                 style = MaterialTheme.typography.headlineSmall,
                 modifier = Modifier.padding(16.dp)
@@ -108,12 +131,15 @@ fun FinanceTrackerScreen() {
 
         ){
 
+            //heading for the balnce
             Text(
                 text = "Balance",
                 style = MaterialTheme.typography.titleMedium
             )
 
             Text(
+                //displays it in euro
+                //formatting instructions to .2 decimal places and f indicates a floating point number, and inserts it in the balance
                 text = "€%.2f".format(balance),
                 style = MaterialTheme.typography.headlineLarge
             )
@@ -158,35 +184,48 @@ fun FinanceTrackerScreen() {
                 }
             }
 
+
             Spacer(modifier = Modifier.height(32.dp))
 
             Text(
+                //displays text as heading
                 text = "Recent Transactions",
                 style = MaterialTheme.typography.titleLarge
             )
 
             Spacer(modifier = Modifier.height(8.dp))
 
+            //checks if the transactions exist
             if (transactions.isEmpty()) {
 
+                //if there is none then it will return none
                 Text(
                     text = "No transactions yet"
                 )
+                //if there is a transaction
             }else {
+                //takes the last 5 in the list
                 transactions.takeLast(5).forEach { transaction ->
                     TransactionRow(
+                        //transaction information displayed
                         title = transaction.title,
                         category = transaction.category,
                         amount = transaction.amount,
                         isIncome = transaction.isIncome,
+                        //if a user clicks edit callback
                         onEdit = {
+                            //the action the android app should perform
                             val intent = Intent(
                                 context,
+                                //the activity that should be open
                                 AddEditTransactionActivity::class.java
 
                             )
+                            //attiondal info to the intent
+                            //the key used to identify the info
                             intent.putExtra("TRANSACTION_ID", transaction.id)
 
+                            //opens the AddEditTransactionActivity
                             context.startActivity(intent)
 
 
@@ -199,6 +238,8 @@ fun FinanceTrackerScreen() {
 
             Spacer(modifier = Modifier.weight(1f))
 
+            //button used to access the other activity for creating transactions
+            //same idea as the callback previously
             Button(
                 onClick = {
                     val intent = Intent(
@@ -216,17 +257,21 @@ fun FinanceTrackerScreen() {
 
 }
 
+//function for the cards
 @Composable
 fun TransactionRow(
+    //the parameters
     title: String,
     category: String,
     amount: Double,
     isIncome: Boolean,
+    //function to run when user clicks edit
     onEdit: () -> Unit
 
 ) {
 
 
+    //cards are created as it is more visually appealing
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -244,6 +289,7 @@ fun TransactionRow(
                 modifier = Modifier.weight(1f)
 
             ){
+                //the details of the transaction
                 Text(
                     text = title,
                     style = MaterialTheme.typography.titleMedium
@@ -253,6 +299,7 @@ fun TransactionRow(
                     text = category
                 )
 
+                //if it is income or expense and displays
                 Text(
                     text = if(isIncome) {
                         "+ €%.2f".format(amount)
@@ -263,6 +310,7 @@ fun TransactionRow(
 
             }
 
+            //executes the callback passed
             Button(
                 onClick = onEdit
             ) {
