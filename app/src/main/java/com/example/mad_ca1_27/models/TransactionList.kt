@@ -25,7 +25,6 @@ class TransactionList {
 
     fun update(transaction: Transaction): Boolean{
         val foundTransaction = findOne(transaction.id)
-
         return if(foundTransaction != null) {
             foundTransaction.title = transaction.title
             foundTransaction.amount = transaction.amount

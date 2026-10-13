@@ -40,6 +40,8 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 //declared as main activity
 //jetpack compose is used
 //Ai was used to help understand Jetpack Compose and designing the site along with the jetpack compose site.
+//AI was used throughout the project the development of the project to help me understand and create individual features and to further understand Kotlin
+//and Jetpack Compose code. It was also used to troubleshoot and help with errors.
 class MainActivity : ComponentActivity() {
     //main activity set up
     override fun onCreate(savedInstanceState: Bundle?) {
