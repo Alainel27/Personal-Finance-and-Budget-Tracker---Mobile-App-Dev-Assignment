@@ -72,7 +72,7 @@ fun AddEditTransactionScreen() {
         null
     }
 
-    //if the varaible is true if an existing transaction is found and false if not
+    //if the variable is true if an existing transaction is found and false if not
     val isEditing = existingTransaction != null
 
     //screen structure

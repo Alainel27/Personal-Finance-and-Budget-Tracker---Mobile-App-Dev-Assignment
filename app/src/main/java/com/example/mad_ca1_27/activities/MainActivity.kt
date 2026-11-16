@@ -57,11 +57,11 @@ class MainActivity : ComponentActivity() {
 
 
 }
-//the function dashboard that dispalys the balance, income, expenses, recent transactions and add transaction button along with edit button
+//the function dashboard that displays the balance, income, expenses, recent transactions and add transaction button along with edit button
 @Composable
 fun FinanceTrackerScreen() {
-    //declares the varaible that cannot be reassigned
-    //context is used in AddEdit when a user wants to add oir edit a transaction
+    //declares the variable that cannot be reassigned
+    //context is used in AddEdit when a user wants to add or edit a transaction
     val context = LocalContext.current
 
     //lifestyle tracks the state of a screen
@@ -75,7 +75,7 @@ fun FinanceTrackerScreen() {
     //The code is vital as it used in detecting when the dashboard becomes active and triggers a refresh
     //registers a lifecycle observer and remove it
     DisposableEffect(lifecycleOwner) {
-        //watches for the lifecycle changes so the app cna respond when the dashboard becomes active
+        //watches for the lifecycle changes so the app can respond when the dashboard becomes active
         val observer = LifecycleEventObserver { _, event ->
 
             //checks if the dashboard is in a resumed state and if it is the refreshkey increments
@@ -134,7 +134,7 @@ fun FinanceTrackerScreen() {
 
         ){
 
-            //heading for the balnce
+            //heading for the balance
             Text(
                 text = "Balance",
                 style = MaterialTheme.typography.titleMedium
