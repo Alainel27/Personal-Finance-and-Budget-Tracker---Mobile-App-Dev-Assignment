@@ -50,8 +50,9 @@ object AppData {
 //https://proandroiddev.com/disposableeffect-side-effect-api-in-jetpack-compose-56cb2d3f7888
 
 //CA2
-//Splash Screen
+
 //https://dev.to/elozino/getting-started-with-splash-screen-in-jetpack-compose-144l
 //https://surajmyt.hashnode.dev/splash-screen-in-jetpack-compose
 //https://www.geeksforgeeks.org/kotlin/animated-splash-screen-in-android-using-jetpack-compose/
 //https://dribbble.com/tags/ft-logo-design
+//https://dev.to/ethand91/android-jetpack-compose-filter-tutorial-21l9

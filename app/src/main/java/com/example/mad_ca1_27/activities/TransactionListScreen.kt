@@ -1,11 +1,14 @@
 package com.example.mad_ca1_27.activities
 
 import android.content.Intent
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -22,6 +25,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.example.mad_ca1_27.main.AppData
+
 
 
 @Composable
@@ -41,9 +45,23 @@ fun TransactionListScreen(){
         onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
     }
 
-    val transactions = remember ( refreshKey ) {
+    var selectedCategory by remember { mutableStateOf("All") }
+
+    val allTransactions = remember ( refreshKey) {
         AppData.transactions.findAll().reversed()
     }
+
+    val categories = listOf("All") + allTransactions.map { it.category }.distinct()
+
+    val activeCategory = if(selectedCategory in categories) selectedCategory else "All"
+
+    val transactions = if(activeCategory == "All"){
+        allTransactions
+    } else{
+        allTransactions.filter { it.category == activeCategory }
+    }
+
+
     Scaffold(
         topBar = {
         Text(
@@ -59,8 +77,23 @@ fun TransactionListScreen(){
                 .padding(paddingValues)
                 .padding(horizontal = 16.dp)
         ) {
+            if (allTransactions.isNotEmpty()){
+                LazyRow(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier.padding(bottom = 8.dp)
+                ) {
+                    items(categories) { category ->
+                        FilterChip(
+                            selected = category ==activeCategory,
+                            onClick = {selectedCategory = category},
+                            label = {Text(category)}
+
+                        )
+                    }
+                }
+            }
             if(transactions.isEmpty()) {
-                Text("No Transaction Yet")
+                Text("No Transaction Found")
             }else{
                 //lazy column only composes and renders items currently visible so it makes it smoother
                 LazyColumn {
