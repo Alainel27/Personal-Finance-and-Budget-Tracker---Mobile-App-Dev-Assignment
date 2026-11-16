@@ -261,7 +261,7 @@ fun AddEditTransactionScreen() {
                     //checks if the amount is invalid
                     //checks if it was converted to a number
                     //checks if it is zero or less than 0
-                    amountError = transactionAmount == null || transactionAmount <- 0
+                    amountError = transactionAmount == null || transactionAmount <= 0
                     //checks if blank
                     categoryError = category.isBlank()
 

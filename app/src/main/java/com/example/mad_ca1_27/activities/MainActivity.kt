@@ -34,7 +34,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.core.splashscreen.SplashScreen
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.navigation.NavHost
+import androidx.navigation.Navigation
+import androidx.navigation.compose.rememberNavController
+import com.example.mad_ca1_27.navigation.AppNavigation
 
 
 //declared as main activity
@@ -50,13 +55,14 @@ class MainActivity : ComponentActivity() {
         //sets up screen interface
        setContent {
            //shows the dashboard
-           FinanceTrackerScreen()
+           AppNavigation()
        }
 
     }
 
 
 }
+
 //the function dashboard that displays the balance, income, expenses, recent transactions and add transaction button along with edit button
 @Composable
 fun FinanceTrackerScreen() {
