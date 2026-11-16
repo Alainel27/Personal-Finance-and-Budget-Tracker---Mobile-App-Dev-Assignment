@@ -25,6 +25,7 @@ import com.example.mad_ca1_27.main.AppData
 import com.example.mad_ca1_27.models.Transaction
 import android.content.Intent
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.TextButton
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -34,6 +35,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.unit.sp
 import androidx.core.splashscreen.SplashScreen
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation.NavHost
@@ -65,7 +67,7 @@ class MainActivity : ComponentActivity() {
 
 //the function dashboard that displays the balance, income, expenses, recent transactions and add transaction button along with edit button
 @Composable
-fun FinanceTrackerScreen() {
+fun FinanceTrackerScreen(onViewAll: () -> Unit) {
     //declares the variable that cannot be reassigned
     //context is used in AddEdit when a user wants to add or edit a transaction
     val context = LocalContext.current
@@ -196,6 +198,14 @@ fun FinanceTrackerScreen() {
 
             Spacer(modifier = Modifier.height(32.dp))
 
+            Button(onClick = onViewAll) {
+                Text(
+                    text = "View All Transactions",
+                    fontSize = 18.sp
+                )
+
+            }
+
             Text(
                 //displays text as heading
                 text = "Recent Transactions",
@@ -213,8 +223,8 @@ fun FinanceTrackerScreen() {
                 )
                 //if there is a transaction
             }else {
-                //takes the last 5 in the list
-                transactions.takeLast(5).forEach { transaction ->
+                //takes the last 4 in the list
+                transactions.takeLast(4).forEach { transaction ->
                     TransactionRow(
                         //transaction information displayed
                         title = transaction.title,
@@ -259,7 +269,10 @@ fun FinanceTrackerScreen() {
                 },
                 modifier = Modifier.padding(top = 24.dp)
             ){
-                Text("Add Transaction")
+                Text(
+                    text = "Add Transaction",
+                    fontSize = 16.sp
+                )
             }
         }
     }

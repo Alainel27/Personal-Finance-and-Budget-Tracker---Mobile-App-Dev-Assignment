@@ -42,7 +42,7 @@ fun SplashScreen(onFinished: () -> Unit) {
             )
         )
         //keep the logo for abit
-        delay(3000L)
+        delay(2000L)
         onFinished()
     }
 

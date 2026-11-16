@@ -8,12 +8,13 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.mad_ca1_27.activities.FinanceTrackerScreen
 import com.example.mad_ca1_27.activities.SplashScreen
-
+import com.example.mad_ca1_27.activities.TransactionListScreen
 
 
 object Routes {
     const val SPLASH = "splash"
     const val HOME = "home"
+    const val TRANSACTIONS = "transactions"
 }
 
 @Composable
@@ -32,7 +33,11 @@ fun AppNavigation() {
             )
         }
         composable (Routes.HOME) {
-            FinanceTrackerScreen()
+            FinanceTrackerScreen(
+            onViewAll = {navController.navigate(Routes.TRANSACTIONS)})
+        }
+        composable ( Routes.TRANSACTIONS ){
+            TransactionListScreen()
         }
     }
 }
