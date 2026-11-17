@@ -39,6 +39,11 @@ class TransactionList {
 
     }
 
+    fun deleteAll() {
+        transactions.clear()
+        lastId.set(0L)
+    }
+
     fun delete(id: Long): Boolean {
         return transactions.removeIf{it.id == id}
     }
