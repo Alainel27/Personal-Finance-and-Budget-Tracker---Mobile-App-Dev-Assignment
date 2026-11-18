@@ -22,9 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.mad_ca1_27.main.AppData
-import com.example.mad_ca1_27.models.Transaction
 import android.content.Intent
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.TextButton
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.Lifecycle
@@ -36,11 +34,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.sp
-import androidx.core.splashscreen.SplashScreen
 import androidx.lifecycle.compose.LocalLifecycleOwner
-import androidx.navigation.NavHost
-import androidx.navigation.Navigation
-import androidx.navigation.compose.rememberNavController
+import com.example.mad_ca1_27.main.AuthManager
 import com.example.mad_ca1_27.navigation.AppNavigation
 
 
@@ -54,6 +49,8 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         AppData.initialise(applicationContext)
+        //Auth
+        AuthManager.initialise(applicationContext)
         //sets up screen interface
        setContent {
            //shows the dashboard
@@ -67,7 +64,7 @@ class MainActivity : ComponentActivity() {
 
 //the function dashboard that displays the balance, income, expenses, recent transactions and add transaction button along with edit button
 @Composable
-fun FinanceTrackerScreen(onViewAll: () -> Unit) {
+fun FinanceTrackerScreen(onViewAll: () -> Unit, onLogout: () -> Unit) {
     //declares the variable that cannot be reassigned
     //context is used in AddEdit when a user wants to add or edit a transaction
     val context = LocalContext.current
@@ -125,12 +122,25 @@ fun FinanceTrackerScreen(onViewAll: () -> Unit) {
     //structure for the screen
     Scaffold(
         topBar = {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+
+
             Text(
                 //heading displayed
                 text = "Finance Tracker",
                 style = MaterialTheme.typography.headlineSmall,
                 modifier = Modifier.padding(16.dp)
             )
+                TextButton(onClick = onLogout) {
+                    Text("Log Out")
+                }
+            }
         }
     ) {paddingValues ->
 
