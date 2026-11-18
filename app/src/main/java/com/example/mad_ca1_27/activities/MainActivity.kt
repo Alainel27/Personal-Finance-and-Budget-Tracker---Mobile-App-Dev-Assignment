@@ -48,9 +48,10 @@ class MainActivity : ComponentActivity() {
     //main activity set up
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        AppData.initialise(applicationContext)
         //Auth
         AuthManager.initialise(applicationContext)
+
+        AppData.initialise(applicationContext)
         //sets up screen interface
        setContent {
            //shows the dashboard

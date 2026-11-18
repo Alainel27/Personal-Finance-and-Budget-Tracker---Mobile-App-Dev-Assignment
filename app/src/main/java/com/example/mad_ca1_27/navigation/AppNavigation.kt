@@ -12,6 +12,7 @@ import com.example.mad_ca1_27.activities.SplashScreen
 import com.example.mad_ca1_27.activities.TransactionListScreen
 import com.example.mad_ca1_27.main.AuthManager
 import com.example.mad_ca1_27.activities.MainActivity
+import com.example.mad_ca1_27.main.AppData
 
 
 object Routes {
@@ -44,6 +45,7 @@ fun AppNavigation() {
         composable (Routes.LOGIN) {
             LoginScreen(
                 onLoginSuccess = {
+                    AuthManager.currentUser?.let { AppData.loadForUser(it)}
                     navController.navigate(Routes.HOME) {
                         popUpTo(Routes.LOGIN) {inclusive = true}
                     }
@@ -55,6 +57,7 @@ fun AppNavigation() {
                 onViewAll = {navController.navigate(Routes.TRANSACTIONS)},
                 onLogout = {
                     AuthManager.logOut()
+                    AppData.clear()
                     navController.navigate(Routes.LOGIN) {
                         popUpTo(Routes.HOME) {inclusive = true}
                     }

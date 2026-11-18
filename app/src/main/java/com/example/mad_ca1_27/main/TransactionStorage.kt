@@ -7,10 +7,10 @@ import com.example.mad_ca1_27.models.Transaction
 import java.io.File
 
 //Ai was used to help create and understand JSON storage in the project
-class TransactionStorage(context: Context) {
+class TransactionStorage(context: Context, filename: String) {
 
     //the code identifies where the transaction will be stored
-    private val file = File(context.filesDir, "transaction.json")
+    private val file = File(context.filesDir, filename)
 
     //function for saving the transaction in storage
     fun save(transactions : List<Transaction>){

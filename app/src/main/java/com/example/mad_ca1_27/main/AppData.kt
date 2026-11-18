@@ -3,6 +3,7 @@ package com.example.mad_ca1_27.main
 import com.example.mad_ca1_27.models.Transaction
 import com.example.mad_ca1_27.models.TransactionList
 import android.content.Context
+import android.util.Base64
 
 //manages the apps transaction data and connects with storage
 object AppData {
@@ -12,22 +13,36 @@ object AppData {
     //AI was used to help create and understand JSON storage
     //declares the object that handles saving and loading transactions
     private var storage: TransactionStorage? = null
+    private lateinit var appContext: Context
 
     //checks if storage has been created
     fun initialise(context: Context) {
-        if (storage == null) {
-            //creates the storage handler
-            storage = TransactionStorage(context.applicationContext)
-            //restores saved data
-            transactions.loadAll(storage!!.load())
-        }
+        appContext = context.applicationContext
+
+        AuthManager.currentUser?.let {loadForUser(it)}
     }
 
+    fun loadForUser(email: String) {
+        storage = TransactionStorage(appContext, fileNameFor(email))
+        transactions.loadAll(storage!!.load())
+    }
 
+    fun clear() {
+        storage = null
+        transactions.loadAll(emptyList())
+    }
 
     //saves the current transactions to persistent storage
     fun saveTransaction() {
         storage?.save(transactions.findAll())
+    }
+
+    private fun fileNameFor(email: String): String{
+        val encoded = Base64.encodeToString(
+            email.toByteArray(),
+            Base64.URL_SAFE or Base64.NO_WRAP or Base64.NO_PADDING
+        )
+        return "transactions_$encoded.json"
     }
 
 }
