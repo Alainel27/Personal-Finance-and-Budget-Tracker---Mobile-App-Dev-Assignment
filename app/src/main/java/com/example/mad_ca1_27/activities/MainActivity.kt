@@ -39,11 +39,13 @@ import com.example.mad_ca1_27.main.AuthManager
 import com.example.mad_ca1_27.navigation.AppNavigation
 
 
+
 //declared as main activity
 //jetpack compose is used
 //Ai was used to help understand Jetpack Compose and designing the site along with the jetpack compose site.
 //AI was used throughout the project the development of the project to help me understand and create individual features and to further understand Kotlin
 //and Jetpack Compose code. It was also used to troubleshoot and help with errors.
+@Suppress("DEPRECATION")
 class MainActivity : ComponentActivity() {
     //main activity set up
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,6 +54,7 @@ class MainActivity : ComponentActivity() {
         AuthManager.initialise(applicationContext)
 
         AppData.initialise(applicationContext)
+
         //sets up screen interface
        setContent {
            //shows the dashboard
@@ -65,7 +68,7 @@ class MainActivity : ComponentActivity() {
 
 //the function dashboard that displays the balance, income, expenses, recent transactions and add transaction button along with edit button
 @Composable
-fun FinanceTrackerScreen(onViewAll: () -> Unit, onLogout: () -> Unit) {
+fun FinanceTrackerScreen(onViewAll: () -> Unit,onViewMap: ()-> Unit,  onLogout: () -> Unit) {
     //declares the variable that cannot be reassigned
     //context is used in AddEdit when a user wants to add or edit a transaction
     val context = LocalContext.current
@@ -209,13 +212,16 @@ fun FinanceTrackerScreen(onViewAll: () -> Unit, onLogout: () -> Unit) {
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            Button(onClick = onViewAll) {
-                Text(
-                    text = "View All Transactions",
-                    fontSize = 18.sp
-                )
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Button(onClick = onViewAll) {
+                    Text(text = "View All", fontSize = 16.sp)
+                }
 
+                Button(onClick = onViewMap) {
+                    Text(text = "View Map", fontSize = 16.sp)
+                }
             }
+            Spacer(modifier = Modifier.height(16.dp))
 
             Text(
                 //displays text as heading

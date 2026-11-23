@@ -29,6 +29,17 @@ import com.example.mad_ca1_27.main.AppData
 import com.example.mad_ca1_27.models.Transaction
 import android.app.Activity
 import androidx.compose.ui.platform.LocalContext
+import android.Manifest
+import android.annotation.SuppressLint
+import android.content.pm.PackageManager
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.modifier.modifierLocalConsumer
+import androidx.core.content.ContextCompat
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.Priority
+import com.google.android.gms.tasks.CancellationTokenSource
 
 
 //provides the activity that displays the screen
@@ -130,6 +141,43 @@ fun AddEditTransactionScreen() {
 
             var categoryError by remember { mutableStateOf(false) }
 
+            var latitude by remember { mutableStateOf(existingTransaction?.latitude ?: 0.0) }
+
+            var longitude by remember { mutableStateOf(existingTransaction?.longitude ?: 0.0) }
+
+            val fusedClient = remember { LocationServices.getFusedLocationProviderClient(context) }
+
+            @SuppressLint("MissingPermission")
+            fun fetchLocation() {
+                fusedClient.getCurrentLocation(
+                    Priority.PRIORITY_BALANCED_POWER_ACCURACY,
+                    CancellationTokenSource().token
+                ).addOnSuccessListener { location ->
+                    if (location != null) {
+                        latitude = location.latitude
+                        longitude = location.longitude
+                    }
+                }
+            }
+
+            val permissionLauncher = rememberLauncherForActivityResult(
+                ActivityResultContracts.RequestPermission()
+            ) {
+                granted ->
+                if (granted) fetchLocation()
+            }
+
+            LaunchedEffect(Unit) {
+                if (!isEditing){
+                    val alreadyGranted = ContextCompat.checkSelfPermission(
+                        context, Manifest.permission.ACCESS_FINE_LOCATION
+                    ) == PackageManager.PERMISSION_GRANTED
+
+                    if (alreadyGranted) fetchLocation()
+                    else permissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+                }
+            }
+
 
 
             //Transaction details heading
@@ -211,6 +259,16 @@ fun AddEditTransactionScreen() {
                 modifier = Modifier.fillMaxWidth()
             )
 
+            Spacer(modifier = Modifier.height(12.dp))
+
+            Text(
+                text = if (latitude != 0.0 || longitude != 0.0)
+                "Location saved: %.4f, %.4f".format(latitude,longitude)
+                else
+                "Location not available"
+            )
+
+
             Spacer(modifier = Modifier.height(16.dp))
 
             //Transaction Type Heading
@@ -249,6 +307,8 @@ fun AddEditTransactionScreen() {
 
             Spacer(modifier = Modifier.height(24.dp))
 
+
+
             //button for saving or updating the transactions
             Button(
                 onClick = {
@@ -273,7 +333,9 @@ fun AddEditTransactionScreen() {
                             amount = transactionAmount!!,
                             category = category.trim(),
                             description = description.trim(),
-                            isIncome = isIncome
+                            isIncome = isIncome,
+                            latitude = latitude,
+                            longitude = longitude
                         )
 
                         //checks whether to add or update

@@ -71,3 +71,6 @@ object AppData {
 //https://www.geeksforgeeks.org/kotlin/animated-splash-screen-in-android-using-jetpack-compose/
 //https://dribbble.com/tags/ft-logo-design
 //https://dev.to/ethand91/android-jetpack-compose-filter-tutorial-21l9
+//https://kotlinlang.org/docs/multiplatform/compose-navigation-routing.html#support-for-browser-navigation-in-web-apps
+//https://github.com/osmdroid/osmdroid/wiki
+//https://wiki.openstreetmap.org/wiki/Blocked_tiles

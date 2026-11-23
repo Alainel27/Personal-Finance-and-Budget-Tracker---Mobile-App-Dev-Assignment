@@ -30,6 +30,8 @@ class TransactionStorage(context: Context, filename: String) {
                     put("description", t.description)
                     put("date", t.date)
                     put("isIncome", t.isIncome)
+                    put("latitude", t.latitude)
+                    put("longitude", t.longitude)
                 }
             )
         }
@@ -62,7 +64,9 @@ class TransactionStorage(context: Context, filename: String) {
                 category = t.getString("category"),
                 description = t.getString("description"),
                 date = t.getString("date"),
-                isIncome = t.getBoolean("isIncome")
+                isIncome = t.getBoolean("isIncome"),
+                latitude = t.optDouble("latitude", 0.0),
+                longitude = t.optDouble("longitude", 0.0)
             )
         }
     }

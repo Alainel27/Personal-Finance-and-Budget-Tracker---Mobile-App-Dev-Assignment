@@ -9,5 +9,7 @@ class Transaction (
     var category: String = "",
     var description: String = "",
     var date: String = "",
-    var isIncome: Boolean = false
+    var isIncome: Boolean = false,
+    var latitude: Double = 0.0,
+    var longitude: Double = 0.0
 )

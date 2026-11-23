@@ -32,6 +32,8 @@ class TransactionList {
             foundTransaction.description = transaction.description
             foundTransaction.date = transaction.date
             foundTransaction.isIncome = transaction.isIncome
+            foundTransaction.latitude = transaction.latitude
+            foundTransaction.longitude = transaction.longitude
             true
         }else{
             false
