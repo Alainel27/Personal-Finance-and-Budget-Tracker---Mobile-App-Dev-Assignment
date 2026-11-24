@@ -217,6 +217,7 @@ fun FinanceTrackerScreen(onViewAll: () -> Unit,onViewMap: ()-> Unit,  onLogout: 
                     Text(text = "View All", fontSize = 16.sp)
                 }
 
+                //to view the map
                 Button(onClick = onViewMap) {
                     Text(text = "View Map", fontSize = 16.sp)
                 }

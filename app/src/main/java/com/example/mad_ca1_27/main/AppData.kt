@@ -21,7 +21,7 @@ object AppData {
 
         AuthManager.currentUser?.let {loadForUser(it)}
     }
-
+//stores the transaction per user
     fun loadForUser(email: String) {
         storage = TransactionStorage(appContext, fileNameFor(email))
         transactions.loadAll(storage!!.load())
@@ -74,3 +74,5 @@ object AppData {
 //https://kotlinlang.org/docs/multiplatform/compose-navigation-routing.html#support-for-browser-navigation-in-web-apps
 //https://github.com/osmdroid/osmdroid/wiki
 //https://wiki.openstreetmap.org/wiki/Blocked_tiles
+//https://kotlinlang.org/docs/keyword-reference.html
+//https://mrappbuilder.medium.com/how-to-integrate-and-work-with-open-street-map-osm-in-an-android-app-kotlin-564b38590bfe

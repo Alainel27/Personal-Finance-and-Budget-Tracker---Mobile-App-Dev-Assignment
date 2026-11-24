@@ -141,43 +141,11 @@ fun AddEditTransactionScreen() {
 
             var categoryError by remember { mutableStateOf(false) }
 
-            var latitude by remember { mutableStateOf(existingTransaction?.latitude ?: 0.0) }
+            //all transactions will be put into this coords which is the waterford setu location
+            //to change the location the numbers associated with them need to change
+            var latitude by remember { mutableStateOf(existingTransaction?.latitude ?: 52.245954) }
 
-            var longitude by remember { mutableStateOf(existingTransaction?.longitude ?: 0.0) }
-
-            val fusedClient = remember { LocationServices.getFusedLocationProviderClient(context) }
-
-            @SuppressLint("MissingPermission")
-            fun fetchLocation() {
-                fusedClient.getCurrentLocation(
-                    Priority.PRIORITY_BALANCED_POWER_ACCURACY,
-                    CancellationTokenSource().token
-                ).addOnSuccessListener { location ->
-                    if (location != null) {
-                        latitude = location.latitude
-                        longitude = location.longitude
-                    }
-                }
-            }
-
-            val permissionLauncher = rememberLauncherForActivityResult(
-                ActivityResultContracts.RequestPermission()
-            ) {
-                granted ->
-                if (granted) fetchLocation()
-            }
-
-            LaunchedEffect(Unit) {
-                if (!isEditing){
-                    val alreadyGranted = ContextCompat.checkSelfPermission(
-                        context, Manifest.permission.ACCESS_FINE_LOCATION
-                    ) == PackageManager.PERMISSION_GRANTED
-
-                    if (alreadyGranted) fetchLocation()
-                    else permissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
-                }
-            }
-
+            var longitude by remember { mutableStateOf(existingTransaction?.longitude ?: -7.139539) }
 
 
             //Transaction details heading

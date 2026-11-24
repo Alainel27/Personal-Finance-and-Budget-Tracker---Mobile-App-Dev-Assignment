@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
 
 
+//the class displays the splashscreen when booting up
 @Composable
 fun SplashScreen(onFinished: () -> Unit) {
     //holds the current scale and can animate over time
@@ -34,6 +35,7 @@ fun SplashScreen(onFinished: () -> Unit) {
 
     //runs once the splash enters the screen
     LaunchedEffect(Unit) {
+        //animating the logo
         scale.animateTo(
             targetValue = 0.7f,
             animationSpec = tween(
@@ -52,6 +54,7 @@ fun SplashScreen(onFinished: () -> Unit) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
+            //the logo in the files
             painter = painterResource(id = com.example.mad_ca1_27.R.drawable.img),
             contentDescription = "App logo",
             modifier = Modifier.scale(scale.value)
